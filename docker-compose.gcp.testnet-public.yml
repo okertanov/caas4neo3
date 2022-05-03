@@ -1,0 +1,98 @@
+##
+## Copyright (c) 2021 - Team11. All rights reserved.
+##
+
+version: '3.7'
+
+services:
+
+#
+# Public node
+#
+
+  neo-testnet-node-public:
+    image: okertanov/neo-testnet-node:latest
+    container_name: neo-testnet-node-public
+    hostname: neo-testnet-node-public
+    ports:
+      - 20332:20332
+      - 20333:20333
+      - 20334:20334
+    networks:
+      - neo_public_net
+    depends_on:
+      - rabbitmq
+    volumes:
+        - neo-node-data-public:/neo-node-data
+        - type: bind
+          source: ./config/testnet/public/config.json
+          target: /neo-node/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/ApplicationLogs/config.json
+          target: /neo-node/Plugins/ApplicationLogs/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/DBFTPlugin/config.json
+          target: /neo-node/Plugins/DBFTPlugin/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/OracleService/config.json
+          target: /neo-node/Plugins/OracleService/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/RpcNep17Tracker/config.json
+          target: /neo-node/Plugins/RpcNep17Tracker/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/TokensTracker/config.json
+          target: /neo-node/Plugins/TokensTracker/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/RpcServer/config.json
+          target: /neo-node/Plugins/RpcServer/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/StatesDumper/config.json
+          target: /neo-node/Plugins/StatesDumper/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/StateService/config.json
+          target: /neo-node/Plugins/StateService/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/NXABlockListener/config.json
+          target: /neo-node/Plugins/NXABlockListener/config.json
+          read_only: true
+        - type: bind
+          source: ./config/testnet/public/plugins/NXAExtendedRpc/config.json
+          target: /neo-node/Plugins/NXAExtendedRpc/config.json
+          read_only: true
+    command: tail -f /dev/null
+
+  #
+  # From:
+  #   https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
+  #   https://github.com/micahhausler/rabbitmq-compose/blob/master/docker-compose.yml
+  #
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: rabbitmq
+    hostname: "rabbitmq"
+    networks:
+      - neo_public_net
+    labels:
+      NAME: "rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+volumes:
+    nxa-node-data-public:
+
+networks:
+  neo_public_net:
+    external: false

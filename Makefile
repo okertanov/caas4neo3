@@ -114,9 +114,61 @@ build-modules-nxa-open-api: modules/nxa-open-api
 ## Docker targets
 ##
 
+PROJECT_NAME=neo-testnet-node
+HUB_REGISTRY_NAME=${PROJECT_NAME}
+HUB_REGISTRY_USER=okertanov
+HUB_REGISTRY_TOKEN=5bd37ac1-045d-4923-8c94-b0f9fbfbe19b
+
+docker-build:
+	docker-compose build --parallel
+
+docker-start:
+	docker-compose up -d
+
+docker-stop:
+	docker-compose down
+
+docker-exec:
+	ifeq ($(OS),Windows_NT)
+		winpty docker-compose exec ${PROJECT_NAME} sh || true
+	else
+		docker-compose exec ${PROJECT_NAME} sh || true
+	endif
+
+docker-clean: docker-stop
+	-@docker container prune --force
+	-@docker image prune --all --force
+
+##
+## Publish targets
+##
+
+publish: build
+	@echo ${HUB_REGISTRY_TOKEN} | docker login --username ${HUB_REGISTRY_USER} --password-stdin
+	docker tag ${PROJECT_NAME}:latest ${HUB_REGISTRY_USER}/${HUB_REGISTRY_NAME}:latest
+	docker push ${HUB_REGISTRY_USER}/${HUB_REGISTRY_NAME}:latest
+
 ##
 ## Deployment targets
 ##
+
+deploy-public: SSH?=team11@neo-testnet-public.lan
+deploy-public: docker-compose.gcp.testnet-public.yml publish
+	ssh ${SSH} mkdir -p ./deployment/${PROJECT_NAME}/config/testnet
+	scp Makefile ${SSH}:./deployment/${PROJECT_NAME}/
+	scp .env ${SSH}:./deployment/${PROJECT_NAME}/
+	scp $< ${SSH}:./deployment/${PROJECT_NAME}/
+	scp -pr config/testnet/public ${SSH}:./deployment/${PROJECT_NAME}/config/testnet/
+	ssh ${SSH} \
+		"cd ./deployment/${PROJECT_NAME}/ && \
+			docker-compose -f $< down"
+	ssh ${SSH} \
+		"cd ./deployment/${PROJECT_NAME}/ && \
+			docker-compose -f $< pull"
+	ssh ${SSH} \
+		"cd ./deployment/${PROJECT_NAME}/ && \
+			docker-compose -f $< up -d"
+	ssh ${SSH} docker ps
 
 ##
 ## Cleanups targets

@@ -1,11 +1,11 @@
 {
-    "name":"NXA Public 1 Wallet",
+    "name":"NEO Public 1 Wallet",
     "version":"1.0",
     "scrypt":{"n":16384,"r":8,"p":8},
     "accounts":[
         {
             "address":"NiwPkuyYzerdzgpFoXFe4nPwNjUnR1mbAH",
-            "label":"NXA Public 1 Account",
+            "label":"NEO Public 1 Account",
             "isDefault":false,
             "lock":false,
             "key":"6PYQnNegYZct7QdedHNtdrawuoT42gmhTzAXF6auwqvDsmrf86ENbYJLdU",
