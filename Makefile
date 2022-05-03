@@ -164,7 +164,7 @@ deploy-public: docker-compose.gcp.testnet-public.yml docker-publish
 	scp -pr config/testnet/public ${SSH}:./deployment/${PROJECT_NAME}/config/testnet/
 	ssh ${SSH} \
 		"cd ./deployment/${PROJECT_NAME}/ && \
-			docker-compose -f $< down"
+			docker-compose -f $< down --remove-orphans"
 	ssh ${SSH} \
 		"cd ./deployment/${PROJECT_NAME}/ && \
 			docker-compose -f $< pull"
