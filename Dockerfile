@@ -8,23 +8,23 @@
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS builder
 
-ENV GITLAB_TOKEN=gitlab-ci-token:tS99VysVoTf7ejc3sX_r
+ENV GIT_ROOT=https://github.com/okertanov
 
-ENV NXA_GIT_VERSION=DVITA-phase3
+ENV NXA_GIT_VERSION=polaris-wip
 
-ENV NXA_VM_REPO=https://${GITLAB_TOKEN}@gitlab.team11.lv/nxa/mirrors/neo-vm.git
+ENV NXA_VM_REPO=${GIT_ROOT}/neo-vm.git
 ENV NXA_VM_DIR=neo-vm
 
-ENV NXA_CORE_REPO=https://${GITLAB_TOKEN}@gitlab.team11.lv/nxa/mirrors/neo.git
+ENV NXA_CORE_REPO=${GIT_ROOT}/neo.git
 ENV NXA_CORE_DIR=neo
 
-ENV NXA_NODE_REPO=https://${GITLAB_TOKEN}@gitlab.team11.lv/nxa/mirrors/neo-node.git
+ENV NXA_NODE_REPO=${GIT_ROOT}/neo-node.git
 ENV NXA_NODE_DIR=neo-node
 
-ENV NXA_MODULES_REPO=https://${GITLAB_TOKEN}@gitlab.team11.lv/nxa/mirrors/neo-modules.git
+ENV NXA_MODULES_REPO=${GIT_ROOT}/neo-modules.git
 ENV NXA_MODULES_DIR=neo-modules
 
-ENV NXA_DVITA_MODULES_REPO=https://${GITLAB_TOKEN}@gitlab.team11.lv/nxa/nxa-modules.git
+ENV NXA_DVITA_MODULES_REPO=${GIT_ROOT}/nxa-modules.git
 ENV NXA_DVITA_MODULES_DIR=nxa-modules
 
 # Install deps
@@ -63,7 +63,7 @@ RUN make
 
 # Build DVITA Modules
 WORKDIR /${NXA_DVITA_MODULES_DIR}
-#RUN git checkout ${NXA_GIT_VERSION}
+RUN git checkout ${NXA_GIT_VERSION}
 RUN make
 
 ##
@@ -117,7 +117,6 @@ COPY ${NXA_CONFIG_FILE} config.json
 COPY ${NXA_PLUGINS_CONFIG}/ApplicationLogs/config.json  ${NXA_PLUGINS_DIR}/ApplicationLogs/config.json
 COPY ${NXA_PLUGINS_CONFIG}/DBFTPlugin/config.json       ${NXA_PLUGINS_DIR}/DBFTPlugin/config.json
 COPY ${NXA_PLUGINS_CONFIG}/OracleService/config.json    ${NXA_PLUGINS_DIR}/OracleService/config.json
-COPY ${NXA_PLUGINS_CONFIG}/RpcNep17Tracker/config.json  ${NXA_PLUGINS_DIR}/RpcNep17Tracker/config.json
 COPY ${NXA_PLUGINS_CONFIG}/TokensTracker/config.json    ${NXA_PLUGINS_DIR}/TokensTracker/config.json
 COPY ${NXA_PLUGINS_CONFIG}/RpcServer/config.json        ${NXA_PLUGINS_DIR}/RpcServer/config.json
 COPY ${NXA_PLUGINS_CONFIG}/StatesDumper/config.json     ${NXA_PLUGINS_DIR}/StatesDumper/config.json
@@ -126,7 +125,7 @@ COPY ${NXA_PLUGINS_CONFIG}/NXABlockListener/config.json ${NXA_PLUGINS_DIR}/NXABl
 COPY ${NXA_PLUGINS_CONFIG}/NXAExtendedRpc/config.json   ${NXA_PLUGINS_DIR}/NXAExtendedRpc/config.json
 
 # Require volume
-VOLUME /nxa-node-data
+VOLUME /neo-node-data
 
 # Run the node inside screen session
 ENTRYPOINT ["screen","-DmS","node","dotnet","neo-cli.dll","--rpc", "--log"]

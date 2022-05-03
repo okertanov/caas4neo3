@@ -1,9 +1,0 @@
-{
-    "PluginConfiguration": {
-      "Network": 877933390,
-      "DBPath": "/neo-node-data/Nep17BalanceData",
-      "TrackHistory": true,
-      "RecordNullAddressHistory": false,
-      "MaxResults": 1000
-    }
-}

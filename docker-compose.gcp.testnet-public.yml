@@ -91,7 +91,7 @@ services:
       - 15672:15672
 
 volumes:
-    nxa-node-data-public:
+    neo-node-data-public:
 
 networks:
   neo_public_net:

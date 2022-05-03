@@ -122,11 +122,14 @@ HUB_REGISTRY_TOKEN=5bd37ac1-045d-4923-8c94-b0f9fbfbe19b
 docker-build:
 	docker-compose build --parallel
 
+docker-rebuild:
+	docker-compose build --parallel --force-rm --pull
+
 docker-start:
 	docker-compose up -d
 
 docker-stop:
-	docker-compose down
+	docker-compose down --remove-orphans
 
 docker-exec:
 	ifeq ($(OS),Windows_NT)
@@ -143,7 +146,7 @@ docker-clean: docker-stop
 ## Publish targets
 ##
 
-publish: build
+docker-publish: docker-build
 	@echo ${HUB_REGISTRY_TOKEN} | docker login --username ${HUB_REGISTRY_USER} --password-stdin
 	docker tag ${PROJECT_NAME}:latest ${HUB_REGISTRY_USER}/${HUB_REGISTRY_NAME}:latest
 	docker push ${HUB_REGISTRY_USER}/${HUB_REGISTRY_NAME}:latest
@@ -153,7 +156,7 @@ publish: build
 ##
 
 deploy-public: SSH?=team11@neo-testnet-public.lan
-deploy-public: docker-compose.gcp.testnet-public.yml publish
+deploy-public: docker-compose.gcp.testnet-public.yml docker-publish
 	ssh ${SSH} mkdir -p ./deployment/${PROJECT_NAME}/config/testnet
 	scp Makefile ${SSH}:./deployment/${PROJECT_NAME}/
 	scp .env ${SSH}:./deployment/${PROJECT_NAME}/
@@ -190,6 +193,9 @@ distclean: clean
 ## Internal targets
 ##
 
-.PHONY: all bootstrap clone build clean distclean
+.PHONY: all bootstrap clone build clean distclean \
+	docker-build docker-rebuild \
+	docker-start docker-stop docker-exec \
+	docker-clean docker-publish deploy-public
 
 .SILENT: clean distclean
