@@ -28,4 +28,5 @@ Also it contains own Neo NODE RPC Extension plugin that does the deployment job.
 [https://github.com/okertanov/caas4neo3](https://github.com/okertanov/caas4neo3)  
 [https://discord.com/channels/382937847893590016/844554664061173790](https://discord.com/channels/382937847893590016/844554664061173790)  
 [https://developers.neo.org/](https://developers.neo.org/)  
+[https://hub.docker.com/r/okertanov/neo-testnet-node](https://hub.docker.com/r/okertanov/neo-testnet-node)  
 
