@@ -1,0 +1,21 @@
+{
+    "name":"NXA Public 1 Wallet",
+    "version":"1.0",
+    "scrypt":{"n":16384,"r":8,"p":8},
+    "accounts":[
+        {
+            "address":"NiwPkuyYzerdzgpFoXFe4nPwNjUnR1mbAH",
+            "label":"NXA Public 1 Account",
+            "isDefault":false,
+            "lock":false,
+            "key":"6PYQnNegYZct7QdedHNtdrawuoT42gmhTzAXF6auwqvDsmrf86ENbYJLdU",
+            "contract":{
+                "script":"DCECL5F2vQPNqjNk56DMkZVNgqCgz52s\u002BkYhGJTTqmUMs2VBVuezJw==",
+                "parameters":[{"name":"signature","type":"Signature"}],
+                "deployed":false
+            },
+            "extra":null
+        }
+    ],
+    "extra":null
+}

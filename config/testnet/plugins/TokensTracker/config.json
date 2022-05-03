@@ -1,0 +1,12 @@
+{
+  "PluginConfiguration": {
+    "DBPath": "/neo-node-data/TokenBalanceData",
+    "TrackHistory": true,
+    "MaxResults": 1000,
+    "Network": 877933390,
+    "EnabledTrackers": [ "NEP-11", "NEP-17" ]
+  },
+  "Dependency": [
+    "RpcServer"
+  ]
+}

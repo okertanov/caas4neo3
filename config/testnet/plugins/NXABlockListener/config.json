@@ -1,0 +1,40 @@
+{
+  "PluginConfiguration": {
+    "TurnedOn": false,
+    "AutoStart": true,
+    "Network": 877933390,
+    "StartBlock": 0,
+    "RMQ": {
+      "VirtualHost": "/",
+      "RMQHost": [ "rabbitmq:5672","localhost:5672" ],
+      "Username": "rabbitmq",
+      "Password": "rabbitmq",
+      "ConfirmSelect": true,
+	  "Exchanges": [
+        {
+          "type": "block",
+          "name": "org.nxa.blockchain.listener.block",
+          "exchange": true
+        },
+        {
+          "type": "transaction",
+          "name": "org.nxa.blockchain.listener.transaction",
+          "exchange": true
+        },
+        {
+          "type": "transfer",
+          "name": "org.nxa.blockchain.listener.transfer",
+          "exchange": true
+        },
+        {
+          "type": "scdeployment",
+          "name": "org.nxa.blockchain.listener.scdeployment",
+          "exchange": true
+        }
+      ]
+    },
+    "DB": {
+      "Path": "/neo-node-data/RMQData_Test_{0}"
+    }
+  }
+}

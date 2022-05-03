@@ -33,7 +33,7 @@ bootstrap: clone
 clone: ${NEO_MODULES} ${NXA_MODULES}
 
 ##
-## NEO_MODULES
+## NEO Infra
 ##
 
 modules/neo-vm:
@@ -57,7 +57,7 @@ modules/neo-devpack-dotnet:
 	cd ${MODULES_DIR}/neo-devpack-dotnet && git checkout ${GIT_BRANCH}
 
 ##
-## NXA_MODULES
+## NXA Infra
 ##
 
 modules/nxa-modules:
@@ -76,12 +76,68 @@ modules/nxa-open-api:
 ## Common targets
 ##
 
-build:
+build: \
+	build-modules-neo-vm \
+	build-modules-neo \
+	build-modules-neo-modules \
+	build-modules-neo-node \
+	build-modules-neo-devpack-dotnet \
+	build-modules-nxa-sc-caas \
+	build-modules-nxa-modules \
+	build-modules-nxa-open-api
+
+build-modules-neo-vm: modules/neo-vm
+	make -C $< build
+
+build-modules-neo: modules/neo
+	make -C $< build
+
+build-modules-neo-modules: modules/neo-modules
+	make -C $< build
+
+build-modules-neo-node: modules/neo-node
+	make -C $< build
+
+build-modules-neo-devpack-dotnet: modules/neo-devpack-dotnet
+	make -C $< build
+
+build-modules-nxa-modules: modules/nxa-modules
+	make -C $< build
+
+build-modules-nxa-sc-caas: modules/nxa-sc-caas
+	make -C $< build
+
+build-modules-nxa-open-api: modules/nxa-open-api
+	make -C $< build
+
+##
+## Docker targets
+##
+
+##
+## Deployment targets
+##
+
+##
+## Cleanups targets
+##
 
 clean:
+	-@make -C modules/neo-vm clean
+	-@make -C modules/neo clean
+	-@make -C modules/neo-modules clean
+	-@make -C modules/neo-node clean
+	-@make -C modules/neo-devpack-dotnet clean
+	-@make -C modules/nxa-modules clean
+	-@make -C modules/nxa-sc-caas clean
+	-@make -C modules/nxa-open-api clean
 
-distclean:
+distclean: clean
 
-.PHONY:
+##
+## Internal targets
+##
+
+.PHONY: all bootstrap clone build clean distclean
 
 .SILENT: clean distclean

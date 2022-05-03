@@ -1,0 +1,20 @@
+{
+    "PluginConfiguration": {
+      "Servers": [
+        {
+          "Network": 877933390,
+          "BindAddress": "0.0.0.0",
+          "Port": 20332,
+          "SslCert": "",
+          "SslCertPassword": "",
+          "TrustedAuthorities": [],
+          "RpcUser": "",
+          "RpcPass": "",
+          "MaxGasInvoke": 20,
+          "MaxFee": 0.1,
+          "MaxConcurrentConnections": 40,
+          "DisabledMethods": [ "openwallet" ]
+        }
+      ]
+    }
+}
