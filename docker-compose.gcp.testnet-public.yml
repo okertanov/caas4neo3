@@ -6,10 +6,9 @@ version: '3.7'
 
 services:
 
-#
-# Public node
-#
-
+  #
+  # Public node
+  #
   neo-testnet-node-public:
     image: okertanov/neo-testnet-node:latest
     container_name: neo-testnet-node-public
@@ -19,7 +18,7 @@ services:
       - 20333:20333
       - 20334:20334
     networks:
-      - neo_public_net
+      - nxa-public-net
     depends_on:
       - rabbitmq
     volumes:
@@ -71,6 +70,81 @@ services:
     command: tail -f /dev/null
 
   #
+  # OpenAPI
+  #
+  nxa-open-api:
+    image: okertanov/nxa-open-api:latest
+    container_name: nxa-open-api
+    hostname: "nxa-open-api"
+    links:
+      - "nxa-open-api-database:nxa-open-api-database"
+    depends_on:
+      - nxa-open-api-database
+    networks:
+      - nxa-public-net
+    ports:
+      - ${API_HTTP_PORT}:${API_HTTP_PORT}
+    environment:
+      # Service
+      API_HOST: ${API_HOST}
+      API_HTTP_PORT: ${API_HTTP_PORT}
+      # DB
+      API_DB_HOST: ${API_DB_HOST}
+      API_DB_PORT: ${API_DB_PORT}
+      API_DB_DATABASE: ${API_DB_DATABASE}
+      API_DB_USER: ${API_DB_USER}
+      API_DB_PASSWORD: ${API_DB_PASSWORD}
+      # MQ
+      MQ_ENDPOINT: ${MQ_ENDPOINT}
+      MQ_EXCHANGE_LISTENER_BLOCKS: ${MQ_EXCHANGE_LISTENER_BLOCKS}
+      MQ_EXCHANGE_LISTENER_TRANSACTIONS: ${MQ_EXCHANGE_LISTENER_TRANSACTIONS}
+      # CaaS
+      CAAS_API_BASE_URL: ${CAAS_API_BASE_URL}
+      CAAS_API_TOKEN: ${CAAS_API_TOKEN}
+      # Blockchain
+      BLOCKCHAIN_SYS_HOT_ADDRESS: ${BLOCKCHAIN_SYS_HOT_ADDRESS}
+      BLOCKCHAIN_SYS_HOT_PK: ${BLOCKCHAIN_SYS_HOT_PK}
+
+  #
+  # OpenAPI Database
+  #
+  #
+  # From: https://hub.docker.com/_/postgres
+  #
+  nxa-open-api-database:
+    image: postgres:12
+    container_name: nxa-open-api-database
+    hostname: "nxa-open-api-database"
+    ports:
+      - ${API_DB_PORT}:${API_DB_PORT}
+    networks:
+      - nxa-public-net
+    volumes:
+      - config/caas/db:/docker-entrypoint-initdb.d/
+      - nxa-open-api-database-data:/var/lib/postgresql/data
+    environment:
+        POSTGRES_DB: ${API_DB_DATABASE}
+        POSTGRES_USER: ${API_DB_USER}
+        POSTGRES_PASSWORD: ${API_DB_PASSWORD}
+
+  #
+  # From: https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+  # WARNING: DEV ONLY
+  #
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: nxa-open-api-pgadmin
+    hostname: "nxa-open-api-pgadmin"
+    networks:
+      - nxa-public-net
+    environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 5050:80
+
+  #
+  # RabbitMQ
   # From:
   #   https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
   #   https://github.com/micahhausler/rabbitmq-compose/blob/master/docker-compose.yml
@@ -80,7 +154,7 @@ services:
     container_name: rabbitmq
     hostname: "rabbitmq"
     networks:
-      - neo_public_net
+      - nxa-public-net
     labels:
       NAME: "rabbitmq"
     environment:
@@ -90,9 +164,40 @@ services:
       - 5672:5672
       - 15672:15672
 
+  #
+  # CaaS
+  #
+  nxa-sc-caas:
+    image: nxa-sc-caas:latest
+    container_name: nxa-sc-caas
+    hostname: "nxa-sc-caas"
+    depends_on:
+      - nxa-open-api-database
+    networks:
+      - nxa-public-net
+    ports:
+      - 5500:5500
+    environment:
+      # DB
+      API_DB_HOST: ${API_DB_HOST}
+      API_DB_PORT: ${API_DB_PORT}
+      API_DB_DATABASE: ${API_DB_DATABASE}
+      API_DB_USER: ${API_DB_USER}
+      API_DB_PASSWORD: ${API_DB_PASSWORD}
+      # RMQ
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
+
 volumes:
     neo-node-data-public:
+    nxa-open-api-database-data:
 
 networks:
-  neo_public_net:
+  nxa-public-net:
     external: false
+
+secrets:
+  apitokens:
+    file: config/caas/caas-db-apitokens.txt

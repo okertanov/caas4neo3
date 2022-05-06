@@ -6,7 +6,9 @@
 ## Definitions
 ##
 
+PROJECT_NAME=neo-testnet-node
 MODULES_DIR=modules
+
 GIT_ROOT=git@github.com:okertanov
 GIT_BRANCH=polaris-wip
 
@@ -114,11 +116,6 @@ build-modules-nxa-open-api: modules/nxa-open-api
 ## Docker targets
 ##
 
-PROJECT_NAME=neo-testnet-node
-HUB_REGISTRY_NAME=${PROJECT_NAME}
-HUB_REGISTRY_USER=okertanov
-HUB_REGISTRY_TOKEN=5bd37ac1-045d-4923-8c94-b0f9fbfbe19b
-
 docker-build:
 	docker-compose build --parallel
 
@@ -146,7 +143,15 @@ docker-clean: docker-stop
 ## Publish targets
 ##
 
-docker-publish: docker-build
+HUB_REGISTRY_NAME=${PROJECT_NAME}
+HUB_REGISTRY_USER=okertanov
+HUB_REGISTRY_TOKEN=5bd37ac1-045d-4923-8c94-b0f9fbfbe19b
+
+docker-publish: docker-publish-node
+	make -C modules/nxa-open-api $@
+	make -C modules/nxa-sc-caas $@
+
+docker-publish-node: docker-build
 	@echo ${HUB_REGISTRY_TOKEN} | docker login --username ${HUB_REGISTRY_USER} --password-stdin
 	docker tag ${PROJECT_NAME}:latest ${HUB_REGISTRY_USER}/${HUB_REGISTRY_NAME}:latest
 	docker push ${HUB_REGISTRY_USER}/${HUB_REGISTRY_NAME}:latest
