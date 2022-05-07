@@ -195,6 +195,19 @@ clean:
 distclean: clean
 
 ##
+## Utility targets
+##
+
+define Util_git_status
+	echo "Updating: $(1)";
+	cd $(1) && git pull && git push && git status;
+endef
+
+git-status:
+	@$(foreach module,$(NEO_MODULES),$(call Util_git_status,$(module)))
+	@$(foreach module,$(NXA_MODULES),$(call Util_git_status,$(module)))
+
+##
 ## Internal targets
 ##
 
