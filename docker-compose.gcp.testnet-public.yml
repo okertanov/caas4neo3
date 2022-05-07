@@ -130,8 +130,9 @@ services:
         API_DB_DATABASE: ${API_DB_DATABASE}
         API_DB_USER: ${API_DB_USER}
         API_DB_PASSWORD: ${API_DB_PASSWORD}
-        POSTGRES_USER: ${API_DB_USER}
-        POSTGRES_PASSWORD: ${API_DB_PASSWORD}
+        POSTGRES_DB: ${API_DB_DATABASE}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   #
   # From: https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
