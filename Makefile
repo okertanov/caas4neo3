@@ -128,6 +128,12 @@ docker-start:
 docker-stop:
 	docker-compose down --remove-orphans
 
+docker-start-all:
+	docker-compose -f docker-compose.gcp.testnet-public.yml up -d
+
+docker-stop-all:
+	docker-compose -f docker-compose.gcp.testnet-public.yml down --remove-orphans
+
 docker-exec:
 	ifeq ($(OS),Windows_NT)
 		winpty docker-compose exec ${PROJECT_NAME} sh || true
@@ -200,7 +206,7 @@ distclean: clean
 
 define Util_git_status
 	echo "Updating: $(1)";
-	cd $(1) && git pull && git push && git status;
+	cd $(1) && git pull --progress && git push --quiet && git status --short;
 endef
 
 git-status:
@@ -214,6 +220,7 @@ git-status:
 .PHONY: all bootstrap clone build clean distclean \
 	docker-build docker-rebuild \
 	docker-start docker-stop docker-exec \
+	docker-start-all docker-stop-all \
 	docker-clean docker-publish deploy-public
 
 .SILENT: clean distclean

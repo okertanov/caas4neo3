@@ -40,10 +40,6 @@ services:
           target: /neo-node/Plugins/OracleService/config.json
           read_only: true
         - type: bind
-          source: ./config/testnet/public/plugins/RpcNep17Tracker/config.json
-          target: /neo-node/Plugins/RpcNep17Tracker/config.json
-          read_only: true
-        - type: bind
           source: ./config/testnet/public/plugins/TokensTracker/config.json
           target: /neo-node/Plugins/TokensTracker/config.json
           read_only: true
@@ -120,7 +116,7 @@ services:
     networks:
       - nxa-public-net
     volumes:
-      - config/caas/db:/docker-entrypoint-initdb.d/
+      - ./config/caas/db:/docker-entrypoint-initdb.d/
       - nxa-open-api-database-data:/var/lib/postgresql/data
     environment:
         POSTGRES_DB: ${API_DB_DATABASE}
@@ -185,10 +181,10 @@ services:
       API_DB_USER: ${API_DB_USER}
       API_DB_PASSWORD: ${API_DB_PASSWORD}
       # RMQ
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
-      RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
+      MQ_EXCHANGE_CAAS: ${MQ_EXCHANGE_CAAS}
 
 volumes:
     neo-node-data-public:
