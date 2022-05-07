@@ -75,7 +75,10 @@ services:
     links:
       - "nxa-open-api-database:nxa-open-api-database"
     depends_on:
+      - rabbitmq
       - nxa-open-api-database
+      - neo-testnet-node-public
+      - nxa-sc-caas
     networks:
       - nxa-public-net
     ports:
@@ -98,6 +101,7 @@ services:
       CAAS_API_BASE_URL: ${CAAS_API_BASE_URL}
       CAAS_API_TOKEN: ${CAAS_API_TOKEN}
       # Blockchain
+      BLOCKCHAIN_RPC_ENDPOINT: ${BLOCKCHAIN_RPC_ENDPOINT}
       BLOCKCHAIN_SYS_HOT_ADDRESS: ${BLOCKCHAIN_SYS_HOT_ADDRESS}
       BLOCKCHAIN_SYS_HOT_PK: ${BLOCKCHAIN_SYS_HOT_PK}
 
@@ -164,7 +168,7 @@ services:
   # CaaS
   #
   nxa-sc-caas:
-    image: nxa-sc-caas:latest
+    image: okertanov/nxa-sc-caas:latest
     container_name: nxa-sc-caas
     hostname: "nxa-sc-caas"
     depends_on:
