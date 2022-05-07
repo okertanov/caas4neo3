@@ -124,9 +124,10 @@ services:
       - ./config/caas/db:/docker-entrypoint-initdb.d/
       - nxa-open-api-database-data:/var/lib/postgresql/data
     environment:
-        POSTGRES_DB: ${API_DB_DATABASE}
-        POSTGRES_USER: ${API_DB_USER}
-        POSTGRES_PASSWORD: ${API_DB_PASSWORD}
+        APP_DB_TOKENS: ${APP_DB_TOKENS}
+        API_DB_DATABASE: ${API_DB_DATABASE}
+        API_DB_USER: ${API_DB_USER}
+        API_DB_PASSWORD: ${API_DB_PASSWORD}
 
   #
   # From: https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html

@@ -129,7 +129,7 @@ docker-stop:
 	docker-compose down --remove-orphans
 
 docker-start-all:
-	docker-compose -f docker-compose.gcp.testnet-public.yml up -d
+	docker-compose -f docker-compose.gcp.testnet-public.yml up
 
 docker-stop-all:
 	docker-compose -f docker-compose.gcp.testnet-public.yml down --remove-orphans
