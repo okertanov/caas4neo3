@@ -177,11 +177,11 @@ docker-publish-node: docker-build
 ##
 
 deploy-public: SSH?=team11@neo-testnet-public.lan
-deploy-public: docker-compose.gcp.testnet-public.yml docker-publish
+deploy-public: docker-compose.gcp.testnet-public.yml
 	ssh ${SSH} mkdir -p ./deployment/${PROJECT_NAME}/config/testnet
 	scp Makefile ${SSH}:./deployment/${PROJECT_NAME}/
 	scp .env ${SSH}:./deployment/${PROJECT_NAME}/
-	scp $< ${SSH}:./deployment/${PROJECT_NAME}/docker-compose.yml
+	scp $< ${SSH}:./deployment/${PROJECT_NAME}/
 	scp -pr config/testnet/public ${SSH}:./deployment/${PROJECT_NAME}/config/testnet/
 	scp -pr config/caas ${SSH}:./deployment/${PROJECT_NAME}/config/
 	ssh ${SSH} \
