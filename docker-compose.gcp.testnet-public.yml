@@ -197,6 +197,20 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
       MQ_EXCHANGE_CAAS: ${MQ_EXCHANGE_CAAS}
 
+  #
+  # Portal
+  #
+  polaris-portal:
+    image: okertanov/polaris-portal:latest
+    container_name: polaris-portal
+    hostname: "polaris-portal"
+    depends_on:
+      - neo-testnet-node-public
+    networks:
+      - nxa-public-net
+    ports:
+      - 4200:80
+
 volumes:
     neo-node-data-public:
     nxa-open-api-database-data:

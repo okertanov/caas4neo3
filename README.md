@@ -18,6 +18,7 @@ Also it contains own Neo NODE RPC Extension plugin that does the deployment job.
 [https://github.com/okertanov/nxa-open-api](https://github.com/okertanov/nxa-open-api)  
 [https://github.com/okertanov/nxa-sc-caas](https://github.com/okertanov/nxa-sc-caas)  
 [https://github.com/okertanov/nxa-modules](https://github.com/okertanov/nxa-modules)  
+[https://github.com/okertanov/polaris-portal](https://github.com/okertanov/polaris-portal)  
 
 ## Mirrored & Patched repos
 [https://github.com/okertanov/neo-vm](https://github.com/okertanov/neo-vm)  

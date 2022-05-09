@@ -22,7 +22,8 @@ NEO_MODULES=\
 NXA_MODULES=\
 	modules/nxa-modules \
 	modules/nxa-sc-caas \
-	modules/nxa-open-api
+	modules/nxa-open-api \
+	modules/polaris-portal
 
 ##
 ## Initial targets
@@ -74,6 +75,10 @@ modules/nxa-open-api:
 	cd ${MODULES_DIR} && git clone ${GIT_ROOT}/nxa-open-api.git
 	cd ${MODULES_DIR}/nxa-open-api && git checkout ${GIT_BRANCH}
 
+modules/polaris-portal:
+	cd ${MODULES_DIR} && git clone ${GIT_ROOT}/polaris-portal.git
+	cd ${MODULES_DIR}/polaris-portal && git checkout ${GIT_BRANCH}
+
 ##
 ## Common targets
 ##
@@ -86,7 +91,8 @@ build: \
 	build-modules-neo-devpack-dotnet \
 	build-modules-nxa-sc-caas \
 	build-modules-nxa-modules \
-	build-modules-nxa-open-api
+	build-modules-nxa-open-api \
+	build-modules-polaris-portal
 
 build-modules-neo-vm: modules/neo-vm
 	make -C $< build
@@ -110,6 +116,9 @@ build-modules-nxa-sc-caas: modules/nxa-sc-caas
 	make -C $< build
 
 build-modules-nxa-open-api: modules/nxa-open-api
+	make -C $< build
+
+build-modules-polaris-portal: modules/polaris-portal
 	make -C $< build
 
 ##
@@ -156,6 +165,7 @@ HUB_REGISTRY_TOKEN=5bd37ac1-045d-4923-8c94-b0f9fbfbe19b
 docker-publish: docker-publish-node
 	make -C modules/nxa-open-api $@
 	make -C modules/nxa-sc-caas $@
+	make -C modules/polaris-portal $@
 
 docker-publish-node: docker-build
 	@echo ${HUB_REGISTRY_TOKEN} | docker login --username ${HUB_REGISTRY_USER} --password-stdin
@@ -171,8 +181,9 @@ deploy-public: docker-compose.gcp.testnet-public.yml docker-publish
 	ssh ${SSH} mkdir -p ./deployment/${PROJECT_NAME}/config/testnet
 	scp Makefile ${SSH}:./deployment/${PROJECT_NAME}/
 	scp .env ${SSH}:./deployment/${PROJECT_NAME}/
-	scp $< ${SSH}:./deployment/${PROJECT_NAME}/
+	scp $< ${SSH}:./deployment/${PROJECT_NAME}/docker-compose.yml
 	scp -pr config/testnet/public ${SSH}:./deployment/${PROJECT_NAME}/config/testnet/
+	scp -pr config/caas ${SSH}:./deployment/${PROJECT_NAME}/config/
 	ssh ${SSH} \
 		"cd ./deployment/${PROJECT_NAME}/ && \
 			docker-compose -f $< down --remove-orphans"
@@ -197,6 +208,7 @@ clean:
 	-@make -C modules/nxa-modules clean
 	-@make -C modules/nxa-sc-caas clean
 	-@make -C modules/nxa-open-api clean
+	-@make -C modules/polaris-portal clean
 
 distclean: clean
 
@@ -221,6 +233,15 @@ git-status:
 	docker-build docker-rebuild \
 	docker-start docker-stop docker-exec \
 	docker-start-all docker-stop-all \
-	docker-clean docker-publish deploy-public
+	docker-clean docker-publish deploy-public \
+	build-modules-neo-vm \
+	build-modules-neo \
+	build-modules-neo-modules \
+	build-modules-neo-node \
+	build-modules-neo-devpack-dotnet \
+	build-modules-nxa-modules \
+	build-modules-nxa-sc-caas \
+	build-modules-nxa-open-api \
+	build-modules-polaris-portal
 
 .SILENT: clean distclean
