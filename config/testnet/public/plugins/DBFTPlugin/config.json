@@ -4,7 +4,7 @@
       "RecoveryLogs": "/neo-node-data/ConsensusState",
       "IgnoreRecoveryLogs": false,
       "AutoStart": false,
-      "MaxBlockSize": 262144,
-      "MaxBlockSystemFee": 900000000000
+      "MaxBlockSize": 2097152,
+      "MaxBlockSystemFee": 150000000000
     }
 }
