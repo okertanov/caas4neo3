@@ -1,14 +1,14 @@
 {
   "PluginConfiguration": {
     "TurnedOn": false,
-    "AutoStart": true,
+    "AutoStart": false,
     "Network": 877933390,
     "StartBlock": 0,
     "RMQ": {
       "VirtualHost": "/",
       "RMQHost": [ "rabbitmq:5672","localhost:5672" ],
       "Username": "rabbitmq",
-      "Password": "rabbitmq",
+      "Password": "903ed095-9342-4008-9e4b-d2bd71452b0c",
       "ConfirmSelect": true,
 	  "Exchanges": [
         {

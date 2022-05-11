@@ -3,6 +3,7 @@
       "Network": 877933390,
       "Path": "/neo-node-data/Data_MPT_{0}",
       "FullState": false,
-      "AutoVerify": false
+      "AutoVerify": false,
+      "MaxFindResultItems": 100
     }
 }
