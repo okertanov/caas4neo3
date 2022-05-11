@@ -35,35 +35,35 @@ RUN apt-get update && apt-get install -y \
 
 # Clone all repos
 WORKDIR /
-RUN git clone ${NXA_VM_REPO} ${NXA_VM_DIR}
-RUN git clone ${NXA_CORE_REPO} ${NXA_CORE_DIR}
-RUN git clone ${NXA_NODE_REPO} ${NXA_NODE_DIR}
-RUN git clone ${NXA_MODULES_REPO} ${NXA_MODULES_DIR}
-RUN git clone ${NXA_DVITA_MODULES_REPO} ${NXA_DVITA_MODULES_DIR}
+RUN git clone ${NXA_VM_REPO} ${NXA_VM_DIR} && \
+    git clone ${NXA_CORE_REPO} ${NXA_CORE_DIR} && \
+    git clone ${NXA_NODE_REPO} ${NXA_NODE_DIR} && \
+    git clone ${NXA_MODULES_REPO} ${NXA_MODULES_DIR} && \
+    git clone ${NXA_DVITA_MODULES_REPO} ${NXA_DVITA_MODULES_DIR}
 
 # Build VM
 WORKDIR /${NXA_VM_DIR}
-RUN git checkout ${NXA_GIT_VERSION}
-RUN make
+##RUN git checkout ${NXA_GIT_VERSION}
+##RUN make
 
 # Build Core
 WORKDIR /${NXA_CORE_DIR}
-RUN git checkout ${NXA_GIT_VERSION}
-RUN make
-
-# Build Node
-WORKDIR /${NXA_NODE_DIR}
-RUN git checkout ${NXA_GIT_VERSION}
-RUN make
+##RUN git checkout ${NXA_GIT_VERSION}
+##RUN make
 
 # Build Modules
 WORKDIR /${NXA_MODULES_DIR}
-RUN git checkout ${NXA_GIT_VERSION}
+##RUN git checkout ${NXA_GIT_VERSION}
 RUN make
 
 # Build DVITA Modules
 WORKDIR /${NXA_DVITA_MODULES_DIR}
-RUN git checkout ${NXA_GIT_VERSION}
+##RUN git checkout ${NXA_GIT_VERSION}
+RUN make
+
+# Build Node
+WORKDIR /${NXA_NODE_DIR}
+##RUN git checkout ${NXA_GIT_VERSION}
 RUN make
 
 ##
