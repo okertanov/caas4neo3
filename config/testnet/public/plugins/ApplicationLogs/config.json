@@ -1,6 +1,7 @@
 {
     "PluginConfiguration": {
+      "Path": "/neo-node-data/ApplicationLogs_{0}",
       "Network": 877933390,
-      "Path": "/neo-node-data/ApplicationLogs_{0}"
+      "MaxStackSize": 65535
     }
 }
